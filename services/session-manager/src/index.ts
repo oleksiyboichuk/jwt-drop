@@ -23,7 +23,7 @@ export async function handler(
       };
     }
 
-    if (method === "POST" && sessionId) {
+    if (method === "POST" && path.endsWith("/invalidate") && sessionId) {
       const res = await handleInvalidate(sessionId);
       return {
         statusCode: res.statusCode,
