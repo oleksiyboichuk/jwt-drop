@@ -1,0 +1,25 @@
+{
+  "name": "@jwt-drop/session-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Session Manager Service (AWS Lambda) for decentralized JWT invalidation",
+  "main": "dist/index.cjs",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node22 --format=cjs --external:@aws-sdk/* --outfile=dist/index.cjs",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.714.0",
+    "@aws-sdk/client-sns": "^3.714.0",
+    "@aws-sdk/lib-dynamodb": "^3.714.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.146",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/uuid": "^10.0.0",
+    "esbuild": "^0.24.2"
+  }
+}
