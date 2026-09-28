@@ -146,7 +146,7 @@ export class SqsWorker {
   async stop(): Promise<void> {
     this.isRunning = false;
 
-    if (this.subscriptionArn && this.subscriptionArn !== "pending confirmation") {
+    if (this.subscriptionArn) {
       try {
         await this.snsClient.send(
           new UnsubscribeCommand({ SubscriptionArn: this.subscriptionArn })

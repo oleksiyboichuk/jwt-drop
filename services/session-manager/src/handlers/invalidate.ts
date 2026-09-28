@@ -47,7 +47,6 @@ export async function handleInvalidate(sessionId: string): Promise<HandlerRespon
       new PublishCommand({
         TopicArn: config.snsTopicArn,
         Message: JSON.stringify(eventPayload),
-        Subject: "SessionInvalidated",
       })
     );
   }
