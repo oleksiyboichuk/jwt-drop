@@ -1,7 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import { handleLogin } from "./handlers/login.js";
 import { handleInvalidate } from "./handlers/invalidate.js";
-import { HandlerResponse } from "./types.js";
 
 const DEFAULT_HEADERS = {
   "Content-Type": "application/json",
@@ -15,19 +14,21 @@ export async function handler(
   const sessionId = event.pathParameters?.sessionId;
 
   try {
-    let response: HandlerResponse | undefined;
-
     if (method === "POST" && path === "/login") {
-      response = await handleLogin(event.body);
-    } else if (method === "POST" && sessionId) {
-      response = await handleInvalidate(sessionId);
+      const res = await handleLogin(event.body);
+      return {
+        statusCode: res.statusCode,
+        headers: DEFAULT_HEADERS,
+        body: res.body,
+      };
     }
 
-    if (response) {
+    if (method === "POST" && sessionId) {
+      const res = await handleInvalidate(sessionId);
       return {
-        statusCode: response.statusCode,
+        statusCode: res.statusCode,
         headers: DEFAULT_HEADERS,
-        body: response.body,
+        body: res.body,
       };
     }
 
