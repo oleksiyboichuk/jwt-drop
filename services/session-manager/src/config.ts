@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import path from "node:path";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { SNSClient } from "@aws-sdk/client-sns";
@@ -11,23 +10,13 @@ export const HARDCODED_USER = {
   password: "password123",
 } as const;
 
-
 function getPrivateKey(): string {
   if (process.env.RSA_PRIVATE_KEY) {
     return process.env.RSA_PRIVATE_KEY.replace(/\\n/g, "\n");
   }
 
-  const localKeyPath = path.resolve(process.cwd(), "keys/private.key");
-  const parentKeyPath = path.resolve(process.cwd(), "../../keys/private.key");
-
-  if (fs.existsSync(localKeyPath)) {
-    return fs.readFileSync(localKeyPath, "utf8");
-  }
-  if (fs.existsSync(parentKeyPath)) {
-    return fs.readFileSync(parentKeyPath, "utf8");
-  }
-
-  return "";
+  const keyPath = process.env.RSA_PRIVATE_KEY_PATH || "keys/private.key";
+  return fs.existsSync(keyPath) ? fs.readFileSync(keyPath, "utf8") : "";
 }
 
 export const config = {

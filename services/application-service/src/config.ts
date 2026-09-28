@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import path from "node:path";
 
 export const APPLICATION_SERVICE_NAME = "Application Service";
 export const SQS_QUEUE_PREFIX = "app-service-queue-";
@@ -10,17 +9,8 @@ function getPublicKey(): string {
     return process.env.RSA_PUBLIC_KEY.replace(/\\n/g, "\n");
   }
 
-  const localKeyPath = path.resolve(process.cwd(), "keys/public.key");
-  const parentKeyPath = path.resolve(process.cwd(), "../../keys/public.key");
-
-  if (fs.existsSync(localKeyPath)) {
-    return fs.readFileSync(localKeyPath, "utf8");
-  }
-  if (fs.existsSync(parentKeyPath)) {
-    return fs.readFileSync(parentKeyPath, "utf8");
-  }
-
-  return "";
+  const keyPath = process.env.RSA_PUBLIC_KEY_PATH || "keys/public.key";
+  return fs.existsSync(keyPath) ? fs.readFileSync(keyPath, "utf8") : "";
 }
 
 export const config = {
